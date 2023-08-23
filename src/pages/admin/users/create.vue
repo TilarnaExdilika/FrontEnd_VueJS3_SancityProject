@@ -33,8 +33,8 @@
                     </div>
 
                     <div class="col-12 col-sm-5">
-                        <a-select show-search placeholder="Tình trạng" style="width: 100%" :options="[]"
-                            :filter-option="[]">
+                        <a-select show-search placeholder="Tình trạng" style="width: 100%" :options="users_status"
+                            :filter-option="filterOption" allow-clear>
                         </a-select>
                     </div>
                 </div>
@@ -87,7 +87,8 @@
                     </div>
 
                     <div class="col-12 col-sm-5">
-                        <a-select show-search placeholder="Phòng ban" style="width: 100%" :options="[]" :filter-option="[]">
+                        <a-select show-search placeholder="Phòng ban" style="width: 100%" :options="departments"
+                            :filter-option="filterOption" allow-clear>
                         </a-select>
                     </div>
                 </div>
@@ -136,13 +137,39 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useMenu } from '../../../stores/use-menu';
-
+import axios from 'axios';
 
 export default defineComponent({
     setup() {
         useMenu().onSelectedKeys(['admin-users']);
+
+        const users_status = ref([]);
+        const departments = ref([]);
+
+        const getUsersCreate = () => {
+            axios.get("http://127.0.0.1:8000/api/users/create")
+                .then((response) => {
+                    users_status.value = response.data.users_status;
+                    departments.value = response.data.departments;
+                })
+                .catch((error) => {
+                    console.log(response.data);
+                });
+        };
+
+        const filterOption = (input, option) => {
+            return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+        };
+
+        getUsersCreate();
+
+        return {
+            users_status,
+            departments,
+            filterOption
+        }
     },
-})
+});
 </script>

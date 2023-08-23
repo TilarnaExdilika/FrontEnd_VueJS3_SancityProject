@@ -8,7 +8,6 @@ window.axios = axios;
 
 import {
     Input,
-    InputPassword,
     Select,
     Avatar,
     Table,
@@ -38,7 +37,6 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(createPinia());
 app.use(router);
 app.use(Input);
-app.use(InputPassword);
 app.use(Select);
 app.use(Avatar);
 app.use(Table);
